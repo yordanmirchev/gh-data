@@ -9,7 +9,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Install dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm   # we tell that this path needs to be stored and shared
+          key: deps-node-modulles-${{ hashFiles('**/package-lock.json') }}  # the id needs to have dynamic part so if the cached content changes we'll know to referesh it. Here we use the hash of a file(s) , ** will match all files.
+      - name: Install dependencies # once we have the file cached if the cache had not been changed we'll reuse the ~/.npm folder
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -23,7 +28,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Install dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm   # we tell that this path needs to be stored and shared
+          key: deps-node-modulles-${{ hashFiles('**/package-lock.json') }}  # the id needs to have dynamic part so if the cached content changes we'll know to referesh it. Here we use the hash of a file(s) , ** will match all files
+      - name: Install dependencies # once we have the file cached if the cache had not been changed we'll reuse the ~/.npm folder
         run: npm ci
       - name: Build website
         run: npm run build
